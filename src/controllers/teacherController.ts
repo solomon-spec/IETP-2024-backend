@@ -2,8 +2,13 @@ import { Request, Response, NextFunction } from 'express';
 import Class from '../models/Class';
 import AssignmentSubmission from '../models/AssignmentSubmission';
 import QuizSubmission from '../models/QuizSubmission';
-
-export const addMaterial = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+interface CustomRequest extends Request {
+    user?: {
+      userId: string;
+      role: string;
+    };
+  }
+export const addMaterial = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
   const { classId, courseId } = req.params;
   const { title, description, url } = req.body;
 
@@ -35,7 +40,7 @@ export const addMaterial = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
-export const addAssignment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const addAssignment = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
   const { classId, courseId } = req.params;
   const { assignmentId, dueDate, points } = req.body;
 
@@ -67,7 +72,7 @@ export const addAssignment = async (req: Request, res: Response, next: NextFunct
   }
 };
 
-export const addQuiz = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const addQuiz = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
   const { classId, courseId } = req.params;
   const { quizId, dueDate, points } = req.body;
 
@@ -99,7 +104,7 @@ export const addQuiz = async (req: Request, res: Response, next: NextFunction): 
   }
 };
 
-export const getClassesAndCourses = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const getClassesAndCourses = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const classes = await Class.find({ 'courses.instructor': req.user?.userId });
     res.json(classes);
@@ -109,7 +114,7 @@ export const getClassesAndCourses = async (req: Request, res: Response, next: Ne
   }
 };
 
-export const getAssignmentSubmissions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const getAssignmentSubmissions = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
   const { assignmentId } = req.params;
 
   try {
@@ -121,7 +126,7 @@ export const getAssignmentSubmissions = async (req: Request, res: Response, next
   }
 };
 
-export const getQuizSubmissions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const getQuizSubmissions = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
   const { quizId } = req.params;
 
   try {
@@ -133,7 +138,7 @@ export const getQuizSubmissions = async (req: Request, res: Response, next: Next
   }
 };
 
-export const gradeQuizSubmission = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const gradeQuizSubmission = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
     const { submissionId } = req.params;
     const { grade, comments } = req.body;
   
@@ -149,7 +154,7 @@ export const gradeQuizSubmission = async (req: Request, res: Response, next: Nex
       next(err);
     }
   };
-  export const gradeAssignmentSubmission = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  export const gradeAssignmentSubmission = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
     const { submissionId } = req.params;
     const { grade, comments } = req.body;
   
