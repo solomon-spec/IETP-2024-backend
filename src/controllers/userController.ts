@@ -88,3 +88,31 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
     next(err);
   }
 };
+
+
+export const getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+export const updateUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const { id } = req.params;
+  const { firstName, middleName, lastName, email, role } = req.body;
+
+  try {
+    const user = await User.findByIdAndUpdate(id, { firstName, middleName, lastName, email, role }, { new: true });
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
