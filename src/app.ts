@@ -4,9 +4,10 @@ import adminRoutes from './routes/admin';
 import teacherRoutes from './routes/teacher';
 import quizRoutes from './routes/quiz';
 import assignmentRoutes from './routes/assignment';
+import { setupSwagger } from './swagger';
 
 const app = express();
-
+setupSwagger(app);
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
