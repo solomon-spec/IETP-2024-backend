@@ -1,24 +1,33 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
+interface CustomRequest extends Request {
+  user?: {
+    userId: string;
+    role: string;
+  };
+}
+
+export const isAdmin = (req: CustomRequest, res: Response, next: NextFunction) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
   if (!token) {
-    return next(new Error('No token, authorization denied'));
+    res.status(401).json({ message: 'No token, authorization denied' });
+    return;
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: string, role: string };
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: string; role: string };
 
     if (decoded.role !== 'admin') {
-      return next(new Error('Access denied'));
+      res.status(403).json({ message: 'Access denied' });
+      return;
     }
 
     req.user = decoded;
     next();
   } catch (err) {
     console.error(err);
-    next(new Error('Token is not valid'));
+    res.status(401).json({ message: 'Token is not valid' });
   }
 };

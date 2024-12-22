@@ -82,9 +82,9 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
     // Send the email with the password
     await sendEmail(email, password, firstName + " " + lastName);
 
-    res.status(201).json({ message: 'User registered successfully and email sent' });
+    res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
     console.error(err);
-    next(new Error('Server error'));
+    next(err);
   }
 };
