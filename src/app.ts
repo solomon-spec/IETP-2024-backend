@@ -1,16 +1,19 @@
-// src/app.ts
 import express from 'express';
 import authRoutes from './routes/auth';
 import adminRoutes from './routes/admin';
+import teacherRoutes from './routes/teacher';
+import quizRoutes from './routes/quiz';
+import assignmentRoutes from './routes/assignment';
 
 const app = express();
 
 app.use(express.json());
-// Use the auth routes
-app.use('/api/auth', authRoutes);
 
-// Use the user routes
+app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/teacher', teacherRoutes);
+app.use('/api/quizzes', quizRoutes);
+app.use('/api/assignments', assignmentRoutes);
 app.get('/', (req, res) => {
   res.send('Hello, world!');
 });
