@@ -48,6 +48,7 @@ const quizSchema = new Schema<IQuiz>({
   title: {
     type: String,
     required: true,
+    index: 'text',
   },
   description: {
     type: String,

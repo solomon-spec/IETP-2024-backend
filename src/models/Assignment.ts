@@ -26,6 +26,7 @@ const assignmentSchema = new Schema<IAssignment>({
   title: {
     type: String,
     required: true,
+    index: 'text', 
   },
   description: {
     type: String,
